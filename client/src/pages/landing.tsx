@@ -30,7 +30,7 @@ export default function Landing() {
         description: `Welcome! Redirecting to your ${role} dashboard...`,
       });
       setTimeout(() => {
-        window.location.href = '/api/login';
+        window.location.href = '/';
       }, 1000);
     },
     onError: (error) => {

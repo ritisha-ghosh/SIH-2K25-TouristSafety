@@ -1,0 +1,1 @@
+- [GitHub repository upload](github-repository-upload.md) — standard GitHub API can complete pushes when the Git transport helper is unavailable.

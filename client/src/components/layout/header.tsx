@@ -56,11 +56,11 @@ export default function Header() {
   };
 
   const navItems = [
-    { path: '/tourist', label: t('tourist'), icon: '👤' },
-    { path: '/police', label: t('police'), icon: '👮' },
-    { path: '/tourism', label: t('tourism_dept'), icon: '🏛️' },
-    { path: '/admin', label: t('admin'), icon: '⚙️' },
-  ];
+    { path: '/tourist', role: 'tourist', label: t('tourist'), icon: '👤' },
+    { path: '/police', role: 'police', label: t('police'), icon: '👮' },
+    { path: '/tourism', role: 'tourism', label: t('tourism_dept'), icon: '🏛️' },
+    { path: '/admin', role: 'admin', label: t('admin'), icon: '⚙️' },
+  ].filter((item) => item.role === user?.role);
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">

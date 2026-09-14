@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import type { User, TouristProfile } from "@shared/schema";
+import { getQueryFn } from "@/lib/queryClient";
 
 interface AuthUser extends User {
   touristProfile?: TouristProfile;
@@ -8,6 +9,7 @@ interface AuthUser extends User {
 export function useAuth() {
   const { data, isLoading } = useQuery({
     queryKey: ["/api/auth/user"],
+    queryFn: getQueryFn({ on401: "returnNull" }),
     retry: false,
   });
 

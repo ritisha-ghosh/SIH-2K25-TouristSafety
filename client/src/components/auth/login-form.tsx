@@ -30,7 +30,7 @@ export default function LoginForm({ onSwitchToRegister }: LoginFormProps) {
         description: "Welcome! Redirecting to your dashboard...",
       });
       setTimeout(() => {
-        window.location.href = '/api/login';
+        window.location.href = '/';
       }, 1000);
     },
     onError: (error) => {

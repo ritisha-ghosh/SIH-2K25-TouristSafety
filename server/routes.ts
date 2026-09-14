@@ -18,7 +18,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Auth routes
   app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user?.claims?.sub;
+      const userId = (req.user as any)?.claims?.sub;
       if (!userId) {
         return res.status(401).json({ message: "Invalid user session" });
       }
@@ -89,8 +89,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const user = await storage.upsertUser(userData);
       
       // Create tourist profile if needed
+      let touristProfile = null;
       if (role === 'tourist') {
-        let touristProfile = await storage.getTouristProfile(user.id);
+        touristProfile = await storage.getTouristProfile(user.id);
         if (!touristProfile) {
           touristProfile = await storage.createTouristProfile({
             userId: user.id,
@@ -103,10 +104,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
             validUntil: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days
           });
         }
-        res.json({ user, touristProfile });
-      } else {
-        res.json({ user });
       }
+
+      // Establish a real session for the selected demo user. Redirecting to
+      // /api/login here would replace the demo role with the Replit account.
+      const demoSessionUser = {
+        claims: {
+          sub: user.id,
+          email: user.email,
+          first_name: user.firstName,
+          last_name: user.lastName,
+          profile_image_url: user.profileImageUrl,
+        },
+        expires_at: Math.floor(Date.now() / 1000) + 24 * 60 * 60,
+      };
+
+      await new Promise<void>((resolve, reject) => {
+        req.login(demoSessionUser, (error) => {
+          if (error) reject(error);
+          else resolve();
+        });
+      });
+
+      res.json({ user, touristProfile });
     } catch (error) {
       console.error("Demo login error:", error);
       res.status(500).json({ message: "Demo login failed" });
@@ -247,7 +267,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Panic button endpoint
   app.post('/api/panic', isAuthenticated, async (req, res) => {
     try {
-      const userId = req.user?.claims?.sub;
+      const userId = (req.user as any)?.claims?.sub;
       if (!userId) {
         return res.status(401).json({ message: "Invalid user session" });
       }
@@ -298,7 +318,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Alerts routes
   app.get('/api/alerts', isAuthenticated, async (req, res) => {
     try {
-      const userId = req.user?.claims?.sub;
+      const userId = (req.user as any)?.claims?.sub;
       if (!userId) {
         return res.status(401).json({ message: "Invalid user session" });
       }
