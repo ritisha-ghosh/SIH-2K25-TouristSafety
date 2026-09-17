@@ -40,5 +40,4 @@ Our platform connects tourists, police authorities, tourism departments, and adm
 🔸 Geo-fence violation alerts  
 🔸 Daily reports and system notifications  
 
-The platform also ensures **role-based access**, so every user can access only the dashboard and information relevant to their responsibility.
 
