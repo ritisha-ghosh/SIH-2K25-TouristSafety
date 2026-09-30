@@ -1,4 +1,4 @@
-hhhklhlkh
+
 Our platform connects tourists, police authorities, tourism departments, and administrators through dedicated role-based dashboards.
 
 ## Key Features
